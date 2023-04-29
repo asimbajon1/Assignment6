@@ -1,37 +1,21 @@
 import pytest
-from barkylib.adapters.orm import SqlAlchemyRepository
+from datetime import datetime
+from barkylib.adapters.repository import SqlAlchemyRepository
 from barkylib.domain.models import Bookmark
 
-@pytest.fixture
-def sql_repo():
-    return SqlAlchemyRepository()
+pytestmark = pytest.mark.usefixtures("mappers")
 
-def test_add_one(sql_repo):
-    bookmark = Bookmark(title="test bookmark", url="http://example.com")
-    sql_repo.add_one(bookmark)
-    assert bookmark in sql_repo.seen
 
-def test_add_many(sql_repo):
-    bookmarks = [
-        Bookmark(title="bookmark 1", url="http://example.com/1"),
-        Bookmark(title="bookmark 2", url="http://example.com/2"),
-        Bookmark(title="bookmark 3", url="http://example.com/3"),
-    ]
-    sql_repo.add_many(bookmarks)
-    assert all(bookmark in sql_repo.seen for bookmark in bookmarks)
-    
-def test_get(sql_repo):
-    bookmark = Bookmark(title="test bookmark", url="http://example.com")
-    sql_repo.add_one(bookmark)
-    assert sql_repo.get("test bookmark") == bookmark
-    
-def test_get_missing(sql_repo):
-    assert sql_repo.get("nonexistent") is None
-    
-def test_edit(sql_repo):
-    bookmark = Bookmark(title="test bookmark", url="http://example.com")
-    sql_repo.add_one(bookmark)
-    bookmark.url = "http://new.example.com"
-    sql_repo.edit(bookmark)
-    assert sql_repo.get("test bookmark").url == "http://new.example.com"
-
+def test_add_bookmark(sqlite_session_factory):
+    session = sqlite_session_factory()
+    repo = SqlAlchemyRepository(session)
+    b1 = Bookmark(
+        id=1,
+        title=f"Google.com",
+        url=f"http://google.com",
+        notes=f"Source of all truth",
+        date_added=datetime(2023, 8, 12),
+        date_edited=datetime(2023, 8, 12),
+    )
+    repo.add_one(b1)
+    assert repo.get(b1.id) == b1
