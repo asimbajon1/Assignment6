@@ -5,8 +5,7 @@
 ## Notes
 ```
 I'm a Python beginner and did my best to diagnose problems. 
-    On e2e testing, not sure why server refuses connection despite 
-        the database credentials defined in the config.py module.
+    e2e testing runs into server errors.
     Integration testing runs into several issues.
 ```
 
