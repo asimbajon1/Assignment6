@@ -1,5 +1,34 @@
 # Barky
 
+# Instructions and Guidelines
+
+## Notes
+```
+I'm a Python beginner and did my best to diagnose problems. 
+    On e2e testing, not sure why server refuses connection despite 
+        the database credentials defined in the config.py module.
+    Integration testing runs into several issues.
+```
+
+## Creating a local virtual environment
+```
+py -3 -m venv venv
+```
+
+## Pip installs
+```
+pip install -r requirements.txt
+```
+
+## Running the tests
+```
+pytest tests/unit
+pytest tests/integration
+pytest tests/e2e
+```
+
+# Barky
+
 Barky is inspired by Dane Hillard's Bark example of an application that demonstrates some basic software engineering principles such as:
 
 - Separation of concerns
